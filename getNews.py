@@ -9,7 +9,7 @@
 #Fox: 				http://feeds.foxnews.com/foxnews/national
 #ABC: 				https://abcnews.go.com/abcnews/usheadlines
 #NYT: 				https://rss.nytimes.com/services/xml/rss/nyt/US.xml
-#Washington Post: 		http://feeds.washingtonpost.com/rss/national
+#Washington Post: 	http://feeds.washingtonpost.com/rss/national
 #USA Today:			http://rssfeeds.usatoday.com/usatodaycomnation-topstories&x=1
 #NBC:				https://www.cnbc.com/id/15837362/device/rss/rss.html
 #CBS:				https://www.cbsnews.com/latest/rss/us
@@ -107,7 +107,7 @@ def cleanse(string):
 			string = string[1:]
 	
 	#Removes single quotes, backslashes, and special tags
-	return re.sub(r'&[a-z]+;',"", string.replace("'","").replace("\\","-"))
+	return re.sub(r'&[#a-zA-Z0-9]+;',"", string.replace("'","").replace("\\","-"))
 	
 #Utilizes the other functions, and writes news from these feeds to a file
 def writeFeeds():	
