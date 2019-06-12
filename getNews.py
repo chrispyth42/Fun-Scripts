@@ -1,11 +1,15 @@
 #!/usr/bin/python3
 
+#This script parses in data from RSS feeds, cleanses them of single quotes and backslashes, then inserts that data
+#to a local sqlite database file
+#Adjust the sqlite file path on line 68 to point towards a desired location on your system
+
 #RSS Feeds
 #BBC:				http://feeds.bbci.co.uk/news/world/us_and_canada/rss.xml
 #Fox: 				http://feeds.foxnews.com/foxnews/national
 #ABC: 				https://abcnews.go.com/abcnews/usheadlines
 #NYT: 				https://rss.nytimes.com/services/xml/rss/nyt/US.xml
-#Washington Post: 	http://feeds.washingtonpost.com/rss/national
+#Washington Post: 		http://feeds.washingtonpost.com/rss/national
 #USA Today:			http://rssfeeds.usatoday.com/usatodaycomnation-topstories&x=1
 
 import requests
