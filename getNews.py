@@ -63,7 +63,7 @@ def writeNews(station):
 	#Open and prep database file, using Month/Year as the filename
 	db = sqlite3.connect("/home/pi/Desktop/Share/News/" + getDate() + ".sqlite")
 	c = db.cursor()
-	c.execute("CREATE TABLE IF NOT EXISTS news (title TEXT, link TEXT, date TEXT, source TEXT)")
+	c.execute("CREATE TABLE IF NOT EXISTS news (title TEXT, link TEXT, description TEXT, date TEXT, source TEXT)")
 	
 	#Counter for new news stories
 	k = 0
@@ -72,7 +72,7 @@ def writeNews(station):
 	for elem in station:
 		c.execute("SELECT title,source FROM news WHERE title='%s' AND source='%s'" % (elem['title'],elem['source']))
 		if (len(c.fetchall()) == 0):
-			c.execute("INSERT INTO news VALUES ('%s','%s','%s','%s')" % (elem['title'],elem['link'],elem['date'],elem['source']))
+			c.execute("INSERT INTO news VALUES ('%s','%s','%s','%s','%s')" % (elem['title'],elem['link'],elem['description'],elem['date'],elem['source']))
 			k += 1
 	
 	#Save the database
@@ -107,3 +107,6 @@ def writeFeeds():
 
 #Runs the script
 writeFeeds()
+
+#Printing a news source to test if it's working
+#printNews(getNews("https://www.npr.org/sections/national/","Test"))
