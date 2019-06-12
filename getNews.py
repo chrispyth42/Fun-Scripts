@@ -101,7 +101,7 @@ def getDate():
 
 #Cleanses text input of bad SQL characters
 def cleanse(string):
-	#Removes trailing spaces if exists
+	#Removes leading space if exists
 	if len(string) > 0:
 		if string[0] == " ":
 			string = string[1:]
