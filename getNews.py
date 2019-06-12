@@ -1,8 +1,8 @@
 #!/usr/bin/python3
 
-#This script parses in data from RSS feeds, cleanses them of single quotes and backslashes, then inserts that data
-#to a local sqlite database file
-#Adjust the sqlite file path on line 68 to point towards a desired location on your system
+#This script fetches news data from 8 different outlets' RSS feeds, clears the text of special string characters, and places each
+#news story into an sqlite database file
+#Output file path is specified on line 73
 
 #RSS Feeds
 #BBC:				http://feeds.bbci.co.uk/news/world/us_and_canada/rss.xml
@@ -11,11 +11,14 @@
 #NYT: 				https://rss.nytimes.com/services/xml/rss/nyt/US.xml
 #Washington Post: 		http://feeds.washingtonpost.com/rss/national
 #USA Today:			http://rssfeeds.usatoday.com/usatodaycomnation-topstories&x=1
+#NBC:				https://www.cnbc.com/id/15837362/device/rss/rss.html
+#CBS:				https://www.cbsnews.com/latest/rss/us
 
 import requests
 import xml.etree.ElementTree as e
 import sqlite3
 import datetime
+import re
 
 def getNews(url,src):
 	#Return variable
@@ -42,7 +45,9 @@ def getNews(url,src):
 			if attr.tag == "link":
 				headline["link"] = cleanse(attr.text)
 			if attr.tag == "pubDate":
-				headline["date"] = cleanse(attr.text)
+				headline["date"] = cleanse(attr.text)[5:] #Trims off day of the week, and adds a 0 to the front to make it consistent if date number is only 1 char
+				if headline["date"][1] == " ":
+					headline["date"] = "0" + headline["date"]
 				
 		#Makes sure that it actually captured something before adding news station source, and appending it to output list 
 		if headline != dict():
@@ -96,7 +101,13 @@ def getDate():
 
 #Cleanses text input of bad SQL characters
 def cleanse(string):
-	return string.replace("'","").replace("\\","-")
+	#Removes trailing spaces if exists
+	if len(string) > 0:
+		if string[0] == " ":
+			string = string[1:]
+	
+	#Removes single quotes, backslashes, and special tags
+	return re.sub(r'&[a-z]+;',"", string.replace("'","").replace("\\","-"))
 	
 #Utilizes the other functions, and writes news from these feeds to a file
 def writeFeeds():	
@@ -107,10 +118,12 @@ def writeFeeds():
 	allnews += getNews("https://rss.nytimes.com/services/xml/rss/nyt/US.xml","New York Times")
 	allnews += getNews("http://feeds.washingtonpost.com/rss/national","Washington Post")
 	allnews += getNews("http://rssfeeds.usatoday.com/usatodaycomnation-topstories&x=1","USA Today")
+	allnews += getNews("https://www.cnbc.com/id/15837362/device/rss/rss.html","NBC News")
+	allnews += getNews("https://www.cbsnews.com/latest/rss/us","CBS News")
 	writeNews(allnews)
 
 #Runs the script
 writeFeeds()
 
 #Printing a news source to test if it's working
-#printNews(getNews("https://www.npr.org/sections/national/","Test"))
+#printNews(getNews("https://www.cbsnews.com/latest/rss/us","CBS News"))
