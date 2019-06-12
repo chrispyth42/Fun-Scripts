@@ -49,7 +49,7 @@ def getNews(url,src):
 	return output
 	
 
-#Just prints all the data lul
+#Just prints all the data
 def printNews(station):
 	for elem in station:
 		print(elem['title'])
