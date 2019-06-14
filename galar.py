@@ -9,7 +9,7 @@ import requests, re, csv
 
 #Gets pokemon data from CSV
 data = {}
-with open('pkmnGens.csv',mode='r') as infile:
+with open('data/pkmnGens.csv',mode='r') as infile:
 	reader = csv.reader(infile)
 	data = dict((rows[0],rows[1]) for rows in reader)
 
