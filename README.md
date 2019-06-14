@@ -1,8 +1,8 @@
 # Fun-Scripts
 A repo for fun scripts that I've written to perform neat tasks
 
-# galar.py
+### galar.py
 Reads from the pokemon website 'Serebii.net' to keep tabs on newly released pokemon for the upcoming games
 
-# getNews.py
+### getNews.py
 getNews.py: Reads from multiple news outlets' RSS feeds, and places the news stories into a local SQLite database file
