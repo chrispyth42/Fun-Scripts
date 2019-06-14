@@ -1,18 +1,6 @@
 #!/usr/bin/python3
-
 #This script fetches news data from 8 different outlets' RSS feeds, clears the text of special string characters, and places each
 #news story into an sqlite database file
-#Output file path is specified on line 73
-
-#RSS Feeds
-#BBC:				http://feeds.bbci.co.uk/news/world/us_and_canada/rss.xml
-#Fox: 				http://feeds.foxnews.com/foxnews/national
-#ABC: 				https://abcnews.go.com/abcnews/usheadlines
-#NYT: 				https://rss.nytimes.com/services/xml/rss/nyt/US.xml
-#Washington Post: 		http://feeds.washingtonpost.com/rss/national
-#USA Today:			http://rssfeeds.usatoday.com/usatodaycomnation-topstories&x=1
-#NBC:				https://www.cnbc.com/id/15837362/device/rss/rss.html
-#CBS:				https://www.cbsnews.com/latest/rss/us
 
 import requests
 import xml.etree.ElementTree as e
@@ -20,6 +8,8 @@ import sqlite3
 import datetime
 import re
 
+#Accepts RSS feed url, and name of the station; to be appended onto each news story
+#Returns a list of Dictionary objects, which are each a news story
 def getNews(url,src):
 	#Return variable
 	output = list()
@@ -58,7 +48,7 @@ def getNews(url,src):
 	return output
 	
 
-#Just prints all the data
+#Just prints all the data collected with getNews()
 def printNews(station):
 	for elem in station:
 		print(elem['title'])
@@ -68,11 +58,12 @@ def printNews(station):
 		print("\t" + elem["source"])
 		print("--------------------------------")
 
-def writeNews(station):		
-	#Open and prep database file, using Month/Year as the filename
-	db = sqlite3.connect("/home/pi/Desktop/Share/News/" + getDate() + ".sqlite")
+#Accepts news story data, and the output database file location
+def writeNews(station,file):		
+	#Open and prep database file
+	db = sqlite3.connect(file)
 	c = db.cursor()
-	c.execute("CREATE TABLE IF NOT EXISTS news (title TEXT, link TEXT, description TEXT, date TEXT, source TEXT)")
+	c.execute("CREATE TABLE IF NOT EXISTS news (title TEXT, link TEXT, description TEXT, pubDate TEXT, capDate TEXT, source TEXT)")
 	
 	#Counter for new news stories
 	k = 0
@@ -81,14 +72,22 @@ def writeNews(station):
 	for elem in station:
 		c.execute("SELECT title,source FROM news WHERE title='%s' AND source='%s'" % (elem['title'],elem['source']))
 		if (len(c.fetchall()) == 0):
-			c.execute("INSERT INTO news VALUES ('%s','%s','%s','%s','%s')" % (elem['title'],elem['link'],elem['description'],elem['date'],elem['source']))
+			c.execute("INSERT INTO news VALUES ('%s','%s','%s','%s','%s','%s')" % (elem['title'],elem['link'],elem['description'],elem['date'],getDate(),elem['source']))
 			k += 1
 	
 	#Save the database
 	db.commit()
 	print(str(k) + " new news stories added")
 
-#Gets a formatted date string to use as a filename (by month)
+#Gets a formatted date string to use as a filename (In this case, 062019)
+def getMY():
+	m = str(datetime.datetime.now().month)
+	if (len(m) == 1):
+		m = "0" + m
+	y = str(datetime.datetime.now().year)
+	return m + y 
+
+#Gets a formatted date string to add as news story retrieval time
 def getDate():
 	m = str(datetime.datetime.now().month)
 	if (len(m) == 1):
@@ -97,9 +96,16 @@ def getDate():
 	if (len(d) == 1):
 		d = "0" + m
 	y = str(datetime.datetime.now().year)
-	return m + y 	
-
-#Cleanses text input of bad SQL characters
+	
+	hr = str(datetime.datetime.now().hour)
+	if (len(hr) == 1):
+		hr = "0" + hr
+	min = str(datetime.datetime.now().minute)
+	if (len(min) == 1):
+		min = "0" + min
+	return m + "-" + d + "-" + y + " " + hr + ":" + min
+	
+#Cleanses text of bad characters
 def cleanse(string):
 	#Removes leading space if exists
 	if len(string) > 0:
@@ -110,6 +116,7 @@ def cleanse(string):
 	return re.sub(r'&[#a-zA-Z0-9]+;',"", string.replace("'","").replace("\\","-"))
 	
 #Utilizes the other functions, and writes news from these feeds to a file
+#Will probably have this bit read in from a CSV at some point, but this works just as well
 def writeFeeds():	
 	allnews = list()
 	allnews += getNews("http://feeds.bbci.co.uk/news/world/us_and_canada/rss.xml","BBC News")
@@ -117,13 +124,21 @@ def writeFeeds():
 	allnews += getNews("http://feeds.foxnews.com/foxnews/national","Fox News")
 	allnews += getNews("https://rss.nytimes.com/services/xml/rss/nyt/US.xml","New York Times")
 	allnews += getNews("http://feeds.washingtonpost.com/rss/national","Washington Post")
-	allnews += getNews("http://rssfeeds.usatoday.com/usatodaycomnation-topstories&x=1","USA Today")
 	allnews += getNews("https://www.cnbc.com/id/15837362/device/rss/rss.html","NBC News")
 	allnews += getNews("https://www.cbsnews.com/latest/rss/us","CBS News")
-	writeNews(allnews)
+	writeNews(allnews,"/home/pi/Desktop/Share/News/" + getMY() + ".sqlite")
 
 #Runs the script
 writeFeeds()
 
-#Printing a news source to test if it's working
+#Printing a news source to test if it's working, before adding it to writeFeeds list
 #printNews(getNews("https://www.cbsnews.com/latest/rss/us","CBS News"))
+
+#RSS Feeds that work 
+#BBC:				http://feeds.bbci.co.uk/news/world/us_and_canada/rss.xml
+#Fox: 				http://feeds.foxnews.com/foxnews/national
+#ABC: 				https://abcnews.go.com/abcnews/usheadlines
+#NYT: 				https://rss.nytimes.com/services/xml/rss/nyt/US.xml
+#Washington Post: 		http://feeds.washingtonpost.com/rss/national
+#NBC:				https://www.cnbc.com/id/15837362/device/rss/rss.html
+#CBS:				https://www.cbsnews.com/latest/rss/us
