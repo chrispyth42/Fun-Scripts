@@ -6,3 +6,6 @@ Reads from the pokemon website 'Serebii.net' to keep tabs on currently known pok
 
 ### getNews.py
 Reads from multiple news outlets' RSS feeds, and places the news stories into a local SQLite database file. With election season coming up, and controversy always surrounding news, I have this script running on a CRON job every 15 minutes to gather data; which may be fun to analyze after a longer period of time
+
+### download.py
+Is a small but powerful function that accepts a URL to a webpage, and a destination filename, and downloads whatever data is on the target webpage into the file.
