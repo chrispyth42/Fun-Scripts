@@ -134,7 +134,7 @@ def cleanse(string):
 def writeFeeds():	
 	allnews = list()
 	
-	f = open('newsSrc.csv')
+	f = open('data/newsSrc.csv')
 	news = csv.reader(f)
 	for row in news:
 		try:
