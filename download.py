@@ -5,8 +5,9 @@ import requests
 
 def download(url,filename):
 	with open(filename, 'wb') as handler:
-		img = requests.get(url,stream=True)
-		for block in img.iter_content(1024):
+		#stream=True makes it so that it's downloaded in chunks instead of all at once: starting in the following line with .iter_content
+		data = requests.get(url,stream=True)
+		for block in data.iter_content(1024):
 			if not block:
 				break
 			handler.write(block)
