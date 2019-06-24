@@ -6,6 +6,8 @@ def download(url,filename):
 	with open(filename, 'wb') as handler:
 		#stream=True makes it so that it's downloaded in chunks instead of all at once: starting in the following line with .iter_content
 		data = requests.get(url,stream=True)
+		
+		#Downloads and writes 1024 byte blocks from the URL until it recieves an empty block
 		for block in data.iter_content(1024):
 			if not block:
 				break
