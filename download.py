@@ -1,6 +1,5 @@
 #!/usr/bin/python3
 #Downoads a page/file from a URL 
-#https://stackoverflow.com/questions/30229231/python-save-image-from-url/30229298
 import requests
 
 def download(url,filename):
@@ -13,3 +12,6 @@ def download(url,filename):
 			handler.write(block)
 
 download("https://i.imgur.com/zmJArJA.jpg","Wooloo.jpg")
+
+#Stackoverflow reference:
+#https://stackoverflow.com/questions/30229231/python-save-image-from-url/30229298
