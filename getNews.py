@@ -51,7 +51,7 @@ def getNews(url,src,scope):
 			except:
 				pass
 				
-	print("Data retrieved from " + src)
+	#print("Data retrieved from " + src)
 	return output
 	
 
@@ -85,7 +85,7 @@ def writeNews(station,file):
 	
 	#Save the database
 	db.commit()
-	print(str(k) + " new news stories added")
+	print(str(k) + " new news stories added\t" + getDate())
 
 #Gets a formatted date string to use as a filename (In this case, 062019)
 def getMY():
@@ -130,11 +130,12 @@ def cleanse(string):
 	
 	return string
 	
-#Utilizes the other functions, and writes news from these feeds in data/newsSrc.csv to a file
+#Utilizes the other functions, and writes news from these feeds to a file
 def writeFeeds():	
 	allnews = list()
 	
-	f = open('data/newsSrc.csv')
+	#Try every entry in the news sources CSV, and print the name of each that gives an error
+	f = open('/home/pi/Desktop/Share/News/data/newsSrc.csv')
 	news = csv.reader(f)
 	for row in news:
 		try:
@@ -142,10 +143,10 @@ def writeFeeds():
 		except:
 			print("Error in " + row[1])
 			
-	writeNews(allnews,"/home/pi/Desktop/Share/News/" + getMY() + ".sqlite")
+	writeNews(allnews,"/home/pi/Desktop/Share/News/Store/" + getMY() + ".sqlite")
 
 #Runs the script
 writeFeeds()
 
-#Printing a news source to test if it's working
+#Printing a news source to test if it's working, before adding it to the csv
 #printNews(getNews("https://news.yahoo.com/rss","Yahoo News","Global"))
