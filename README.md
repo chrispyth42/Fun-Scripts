@@ -9,3 +9,6 @@ Reads from multiple news outlets' RSS feeds, and places the news stories into a 
 
 ### download.py
 Is a small but powerful function that accepts a URL to a webpage, and a destination filename, and downloads whatever data is on the target webpage into the file.
+
+### RemoveSGUsers.ps1
+Is called in the format .\RemoveUsers.ps1 CSV_PATH 'SG NAME' . It iterates through every user listed in a security group, and gets their full information using Get-ADUser. After doing so, it goes through each criteria in the CSV (see data\criteria.csv), and removes every user from the specified security group that has a property which equals that value. I'm fairly sure it's reliable, but it has NOT BEEN TESTED in a real, non-virtual environment. So feel free to test and judge it before using it 
