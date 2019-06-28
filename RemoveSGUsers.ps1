@@ -37,8 +37,11 @@ $criteriaCSV = Import-CSV "$CSV"
 #Removing every user that meets the specified criteria
 foreach ($criteria in $criteriaCSV){
 	foreach($user in $users){
-		if ($user.($criteria.Criteria) -eq $criteria.Value){
-			Remove-ADGroupMember -Identity $SG -Members $user.Name
+		#Makes sure that neither criteria is blank: as both of them being blank would test every user as true and remove everyone
+		if ((! $criteria.Criteria -eq "") -and (! $criteria.Value -eq "")){
+			if ($user.($criteria.Criteria) -eq $criteria.Value){
+				Remove-ADGroupMember -Identity $SG -Members $user.Name
+			}
 		}
 	}
 }
