@@ -103,7 +103,7 @@ def getDate():
 		m = "0" + m
 	d = str(datetime.datetime.now().day)
 	if (len(d) == 1):
-		d = "0" + m
+		d = "0" + d
 	y = str(datetime.datetime.now().year)
 	
 	hr = str(datetime.datetime.now().hour)
