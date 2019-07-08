@@ -10,8 +10,5 @@ Reads from multiple news outlets' RSS feeds, and places the news stories into a 
 ### download.py
 Is a small but powerful function that accepts a URL to a webpage, and a destination filename, and downloads whatever data is on the target webpage into the file.
 
-### RemoveSGUsers.ps1
-Is called in the format .\RemoveUsers.ps1 CSV_PATH 'SG NAME' . It iterates through every user listed in a security group, and gets their full information using Get-ADUser. After doing so, it goes through each criteria in the CSV (see data\criteria.csv), and removes every user from the specified security group that meets the properties listed there. I'm fairly sure it's reliable, but it has NOT BEEN TESTED very extensively, so feel free to test and judge it before using it. In the sample CSV I've provided, it removes users named 'ike', as well as users that were created at that specific time, from the Security Group
-
 ### ImgSite/
 A fun little webpage with a single button on it, that loads in a random image from a pre-defined array of images; that image being positioned and scaled by CSS so that it's easily viewable on any screen. jQuery is definitely easier for accomplishing this sort of task, but I feel that it would have been a bit overkill to load the whole thing in, for a javascript that's only doing 1 thing
