@@ -10,5 +10,8 @@ Reads from multiple news outlets' RSS feeds, and places the news stories into a 
 ### download.py
 Is a small but powerful function that accepts a URL to a webpage, and a destination filename, and downloads whatever data is on the target webpage into the file.
 
+### TwtterArchiver.py
+Accepts a username for a twitter account, and archives as far back as ~3,200 tweets into an SQLite database file (As far back as twitter's mobile site allows apparently). It turns out, twitter's mobile site is surprisingly unrestricted; having all of the tweet data is neatly stored in the HTML, a link to the next page of tweets at the bottom of each page, and seemingly no limit on the amount of requests they allow you to make (I did put a 1 second delay between requests though just to be sure). The database file schema is (OP TEXT, tweet TEXT, replyingTo TEXT, url TEXT, time TEXT)
+
 ### ImgSite/
 A fun little webpage with a single button on it, that loads in a random image from a pre-defined array of images; that image being positioned and scaled by CSS so that it's easily viewable on any screen. jQuery is definitely easier for accomplishing this sort of task, but I feel that it would have been a bit overkill to load the whole thing in, for a javascript that's only doing 1 thing
